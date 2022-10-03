@@ -1,0 +1,64 @@
+{% extends 'flatpages/default.html' %}
+
+{% block title %}
+Response
+{% endblock title %}
+
+{% block content %}
+    <h3>Просмотр отзывов о ваших публикациях</h3>
+    <br>
+    <form method="GET">
+        {{ filter.form }}
+        <input type="submit" value="Поиск">
+    </form>
+    <br>
+    {% if responseList %}
+        <ul>
+        {% for record in filter.qs %}
+            <hr>
+            <li>
+                <p align="left">
+                    Автор отзыва: {{ record.id_user }}
+                <br>
+                    <b><i>{{ record.text }}</i></b>
+                <br>
+                    {% if not record.accepted %}
+                        <a href="responses/accept/{{ record.pk }}">Принять</a>
+                    {% else %}
+                        Отзыв принят
+                    {% endif %}
+                    <span style="padding-left: 10px;">
+                        <a href="responses/delete/{{ record.pk }}">Удалить</a>
+                    </span>
+                </p>
+            </li>
+        {% endfor %}
+        </ul>
+
+        <hr>
+        {% if is_paginated %}
+            {% if page_obj.has_previous %}
+                <a href="?page=1">В начало</a>
+                <a href="?page={{ page_obj.previous_page_number }}"><<<</a>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                    <a>{{ num }}</a>
+                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                    <a href="?page={{ num }}">{{ num }}</a>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">>>></a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">В конец</a>
+            {% endif %}
+
+        {% endif %}
+
+    {% else %}
+        <h3>Отзывы отсутствуют</h3>
+    {% endif %}
+
+{% endblock content %}

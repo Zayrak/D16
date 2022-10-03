@@ -1,0 +1,29 @@
+{% extends 'flatpages/default.html' %}
+
+{% block title %}
+Advert
+{% endblock title %}
+
+{% block content %}
+    <p align="left">
+        <b>Автор:</b> {{ advertView.id_user }} <span style="padding-left: 10px;"><b>Категория:</b> {{ advertView.id_category }}</span>
+    </p>
+    <hr>
+    <p align="justify">
+        {{ advertView.text }}
+        <hr>
+        {{ advertView.upload.url }}
+    </p>
+    {% if request.user != advertView.id_user %}
+        <hr>
+        <b>Оставьте свой отзыв к публикации</b>
+        <form method="POST">
+            {% csrf_token %}
+        <table align="center">
+            {{ form }}
+        </table>
+            <input type="hidden" name="id_advert" value="{{ advertView.pk }}">
+            <input type="submit" value="Отправить">
+        </form>
+    {% endif %}
+{% endblock content %}

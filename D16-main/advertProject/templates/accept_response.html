@@ -1,0 +1,13 @@
+{% extends 'flatpages/default.html' %}
+
+{% block title %}
+Response
+{% endblock title %}
+
+{% block content %}
+<h3>Вы желаете принять отзыв от пользователя {{ response.id_user }} ?</h3>
+<form method="POST">
+    {% csrf_token %}
+    <input type="hidden" name="id_resp" value="{{ response.pk }}">
+    <input type="submit" value="Подтвердить"></form>
+{% endblock content %}
